@@ -4,8 +4,8 @@
     "slug": "mobile_movie_app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "mobilemovieapp",
+    "icon": "./assets/images/logo.png",
+    "scheme": "movies", 
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
