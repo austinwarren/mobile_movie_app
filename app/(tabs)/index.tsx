@@ -53,7 +53,9 @@ export default function Index() {
                   </View>
               )}
 
-              <>           
+              
+              <>
+                {/* // This Flatlist is fine inside ScrollView because it's horizontal layout and ScrollView is vertical.*/}
                 <FlatList 
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -64,9 +66,14 @@ export default function Index() {
                     <TrendingCard movie={item} index={index} />
                   )}
                   keyExtractor={(item) => item.movie_id.toString()}
-                  />
+                />
                 
                 <Text className="text-lg text-white font-bold mt-5 mb-3"> Latest Movies </Text>
+
+                {/* // This Flatlist is not great inside ScrollView because it's vertical layout and ScrollView is vertical.
+                // It's okay for now since we're not rendering that many items but this can cause performance issues.
+                // ScrollView is better with less items overall also since it's easier to implement while
+                // Flatlist is better for more items since it only renders a liimited number which are visible.*/}
                 <FlatList
                   data={movies}
                   renderItem={({ item }) => (
