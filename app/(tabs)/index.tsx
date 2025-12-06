@@ -5,12 +5,16 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import { getTrendingMovies } from "@/services/appwrite";
+import { useThemeStore } from "@/store/useThemeStore";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 
 
 export default function Index() {
+  const theme = useThemeStore((s) => s.theme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
+  const isDark = theme === "dark";
   const router = useRouter();
 
   const {
@@ -41,9 +45,18 @@ export default function Index() {
   const isError = moviesIsError || trendingIsError;
 
   return (
-    <View className="flex-1 bg-primary">
+    <View className={isDark ? "flex-1 bg-primary" : "flex-1 bg-white"}>
       <Image source={images.bg} className="absolute w-full z-0" />
       <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false} contentContainerStyle={{minHeight: "100%", paddingBottom: 10}}>
+        {/* Theme toggle button */}
+        <Pressable
+          onPress={toggleTheme}
+          className="px-3 py-1 rounded-full bg-secondary"
+        >
+          <Text className="text-white">
+            {isDark ? "Light Mode" : "Dark Mode"}
+          </Text>
+        </Pressable>
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
 
         {moviesLoading || trendingLoading ? (
