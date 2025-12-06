@@ -5,26 +5,40 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import { getTrendingMovies } from "@/services/appwrite";
-import useFetch from "@/services/useFetch";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "react-native";
+
 
 export default function Index() {
   const router = useRouter();
 
   const {
-    data: trendingMovies,
-    loading: trendingLoading,
+    data: trendingMovies = [],
+    isLoading: trendingLoading,
+    isError: trendingIsError,
     error: trendingError
-  } = useFetch(getTrendingMovies);
+  } = useQuery({
+    queryKey: ["trending-movies"],
+    queryFn: getTrendingMovies
+    });
 
-  const { 
-    data: movies, 
-    loading: moviesLoading, 
-    error: moviesError 
-  } = useFetch(() => fetchMovies({
-    query: ''
-  }))
+    
+  const {
+    data: movies = [],
+    isLoading: moviesLoading,
+    isError: moviesIsError,
+    error: moviesError,
+  } = useQuery({
+    queryKey: ["movies", { query: "" }], // include query in key
+    queryFn: () => fetchMovies({ query: "" }),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+  });
+
+
+  const isLoading = moviesLoading || trendingLoading;
+  const isError = moviesIsError || trendingIsError;
 
   return (
     <View className="flex-1 bg-primary">
